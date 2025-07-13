@@ -20,6 +20,7 @@ public class User {
 	private String password;
 	@Column(nullable = false,unique = true)
 	private String emailId;
+	
 	public Long getCustomerId() {
 		return customerId;
 	}

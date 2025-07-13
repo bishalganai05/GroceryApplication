@@ -1,21 +1,25 @@
 package com.bishal.us.service;
 
 import java.util.List;
-import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.bishal.us.entity.User;
+import com.bishal.us.exception.IDNotFoundException;
 import com.bishal.us.exception.UserAlreadyExistsException;
 import com.bishal.us.repository.UserRepo;
+import com.bishal.us.response.UserResponse;
 
 @Service
 public class UserService {
 
 	private final UserRepo userRepo;
+	private final ModelMapper modelMapper;
 	
-	public UserService(UserRepo userRepo) {
+	public UserService(UserRepo userRepo, ModelMapper modelMapper) {
 		this.userRepo = userRepo;
+		this.modelMapper = modelMapper;
 	}
 
 	public User register(User user) {
@@ -31,7 +35,12 @@ public class UserService {
 		return allUsers;
 	}
 
-	public Optional<User> getUserById(int id) {
-		return userRepo.findById(id);
+	public UserResponse getUserById(int id) {
+		User user = userRepo.findById(id)
+				 .orElseThrow(() -> new IDNotFoundException("User not found for the id " + id));
+		
+		UserResponse userResponse = modelMapper.map(user, UserResponse.class);
+		
+		return userResponse;
 	}
 }

@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(IDNotFoundException.class)
-	public ResponseEntity<String> IDNotFoundRuntimeException(IDNotFoundException e) {
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getErrMessageString());
+	public ResponseEntity<String> handleIDNotFound(IDNotFoundException e) {
+	    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 	}
 	
 	@ExceptionHandler(MandatoryFieldException.class)
@@ -18,6 +18,7 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getErrMessage());
 	}
 	
+	@ExceptionHandler(UserAlreadyExistsException.class)
 	public ResponseEntity<String> UserAlreadyExistsException(UserAlreadyExistsException e) {
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getErrMessage());
 	}

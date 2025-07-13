@@ -1,7 +1,6 @@
 package com.bishal.us.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bishal.us.entity.User;
-import com.bishal.us.exception.IDNotFoundException;
 import com.bishal.us.exception.MandatoryFieldException;
+import com.bishal.us.response.UserResponse;
 import com.bishal.us.service.UserService;
 
 
@@ -40,14 +39,10 @@ public class UserController {
 	}
 	
 	@GetMapping("/{id}")
-	public User getUserById(@PathVariable int id) {
-		Optional<User> user = userService.getUserById(id);
-		if(user.isPresent()) {
-			return user.get();
-		}
-		else {
-			throw new IDNotFoundException("Product not found for the id ");
-		}
+	public ResponseEntity<UserResponse> getUserById(@PathVariable int id) {
+		UserResponse userResponse = userService.getUserById(id);
+
+		return ResponseEntity.status(HttpStatus.OK).body(userResponse);
 	}
 	
 	@GetMapping
